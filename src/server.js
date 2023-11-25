@@ -1,7 +1,14 @@
 import express from "express";
+import {fileURLToPath} from 'url';
 
 const app = express();
+const __dirname = fileURLToPath(new URL(".", import.meta.url))
+app.set('view engine', 'pug')
+app.set('views', `${__dirname}/views`)
+app.use('/public',express.static(`${__dirname}public`))
 
-console.log("test");
+app.get('/',(req,res)=>res.render('home'))
+const port = 3000;
+const handleListen = () => console.log(`Listening on http://localhost:${port}`)
 
-app.listen(3000);
+app.listen(port, handleListen);
