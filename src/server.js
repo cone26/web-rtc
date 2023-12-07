@@ -23,14 +23,18 @@ const wss = new WebSocketServer({ server });
 // passed http server to WebSocket.Server() as a parameter
 // => make both of servers are able to run in same port.
 
+//fake db
+const sockets = [];
+
 // send a message to client
 wss.on("connection", (socket) => {
+  sockets.push(socket);
+  // event in the socket
   console.log("Connected to Client !");
   socket.on("close", () => console.log("Disconnect from the Browser"));
-  // event in the socket
   socket.send("are you there?");
   socket.on("message", (msg) => {
-    console.log(msg.toString());
+    sockets.forEach((it) => it.send(msg.toString()));
   });
 });
 

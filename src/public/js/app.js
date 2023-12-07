@@ -1,3 +1,5 @@
+const messageList = document.querySelector("ul");
+const messageForm = document.querySelector("form");
 const socket = new WebSocket(`ws://${window.location.host}`);
 // open connection
 socket.addEventListener("open", () => {
@@ -5,13 +7,17 @@ socket.addEventListener("open", () => {
 });
 
 socket.addEventListener("message", (msg) => {
-  console.log(msg.data);
+  console.log(`new message: ${msg.data}`);
 });
 
 socket.addEventListener("close", () => {
   console.log("The Connection is closed !");
 });
 
-setTimeout(() => {
-  socket.send("I'm here !");
-}, 5000);
+function handleSubmit(event) {
+  event.preventDefault();
+  const input = messageForm.querySelector("input");
+  socket.send(input.value);
+  input.value = "";
+}
+messageForm.addEventListener("submit", handleSubmit);
